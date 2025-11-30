@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: process-mcp-config
+  labels:
+    app: process-mcp-server
+data:
+  # Logging configuration
+  LOG_LEVEL: "INFO"
+
+  # Python environment
+  PYTHONUNBUFFERED: "1"
+
+  # NPM cache directory (for supergateway)
+  npm_config_cache: "/tmp/.npm"

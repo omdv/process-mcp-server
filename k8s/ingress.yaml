@@ -1,0 +1,27 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: process-mcp-server
+  labels:
+    app: process-mcp-server
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - process-mcp-server.kblb.io
+      secretName: my-certs-process-mcp-server
+  rules:
+    - host: process-mcp-server.kblb.io
+      http:
+        paths:
+          - path: /mcp
+            pathType: Prefix
+            backend:
+              service:
+                name: process-mcp-server
+                port:
+                  name: http

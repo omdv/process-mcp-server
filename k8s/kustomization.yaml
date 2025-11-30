@@ -1,0 +1,39 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: mcp
+
+# Common labels applied to all resources
+labels:
+  - pairs:
+      app: process-mcp-server
+      managed-by: kustomize
+
+# Resources to deploy
+resources:
+  - configmap.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+# ConfigMap generator (alternative to configmap.yaml)
+# Uncomment to use generator instead of static file
+# configMapGenerator:
+#   - name: process-mcp-config
+#     literals:
+#       - LOG_LEVEL=INFO
+#       - PYTHONUNBUFFERED=1
+
+# Images to use (override image tags)
+images:
+  - name: omdv/process-mcp-server
+    newTag: latest
+
+# Replicas override
+# replicas:
+#   - name: process-mcp-server
+#     count: 3
+
+# Common annotations
+commonAnnotations:
+  deployment-tool: kustomize
+  documentation: k8s/README.md
