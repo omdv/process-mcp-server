@@ -1,12 +1,15 @@
 # Use Python base image and install Node.js for supergateway
 FROM python:3.13-slim
 
-# Install Node.js, npm, and curl for health check
+# Install Node.js, npm, Java JDK (required for NeqSim), and curl for health check
 RUN apt-get update && \
-    apt-get install -y curl && \
+    apt-get install -y curl default-jdk && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*
+
+# Set JAVA_HOME environment variable
+ENV JAVA_HOME=/usr/lib/jvm/default-java
 
 # Set working directory
 WORKDIR /app

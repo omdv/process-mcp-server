@@ -230,8 +230,8 @@ OPTIMIZATION GOALS:
 - Balance Oil Quality (TVP), Gas Quality (Cricondenbar), and Power Consumption
 
 CRITICAL CONSTRAINTS:
-- Oil TVP must be < 0.96 bara for tanker export
-- Gas Cricondenbar must be < 100 bara for pipeline export
+- Oil TVP max must be in the range of 0.90 to 0.96 bara for tanker export safety
+- Max of Gas Cricondenbar must be in 100-110 bara range to prevent slug formation in pipelines
 - Trade-off: Higher heater temps improve TVP but increase gas compression power costs
 
 KEY PARAMETERS:
@@ -239,8 +239,8 @@ KEY PARAMETERS:
 - firstStagePressure, secondStagePressure, thirdStagePressure: Control separation efficiency
 
 OUTPUT METRICS:
-- tvp_bara: True Vapor Pressure of stabilized oil at 20°C (target: < 0.96 bara)
-- cricondenbar_bara: Cricondenbar of export gas (target: < 100 bara)
+- tvp_bara: True Vapor Pressure of stabilized oil at 20°C
+- cricondenbar_bara: Cricondenbar of export gas
 - recomp_power_1_kW, recomp_power_2_kW: Recompression power consumption
 - export_power_1_kW, export_power_2_kW: Export compression power consumption
 - stable_oil_flow_kg_hr: Stabilized oil production rate
@@ -265,11 +265,11 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
 
 RESULTS:
 Oil Quality:
-  - TVP: {result['tvp_bara']} bara (target: < 0.96 bara)
+  - TVP: {result['tvp_bara']} bara
   - Stable Oil Flow: {result['stable_oil_flow_kg_hr']} kg/hr
 
 Gas Quality:
-  - Cricondenbar: {result['cricondenbar_bara']} bara (target: < 100 bara)
+  - Cricondenbar: {result['cricondenbar_bara']} bara
   - Export Gas Flow: {result['export_gas_flow_kg_hr']} kg/hr
 
 Power Consumption:
@@ -278,10 +278,6 @@ Power Consumption:
   - Export Compression Stage 1: {result['export_power_1_kW']} kW
   - Export Compression Stage 2: {result['export_power_2_kW']} kW
   - Total Power: {result['recomp_power_1_kW'] + result['recomp_power_2_kW'] + result['export_power_1_kW'] + result['export_power_2_kW']} kW
-
-CONSTRAINTS CHECK:
-  - TVP constraint: {"✓ PASS" if result['tvp_bara'] < 0.96 else "✗ FAIL"}
-  - Cricondenbar constraint: {"✓ PASS" if result['cricondenbar_bara'] < 100 else "✗ FAIL"}
 """
             else:
                 output = f"Simulation failed: {result.get('message', 'Unknown error')}"
